@@ -13,12 +13,10 @@
         <div class="header-content">
             <div class="logo">NEXUS</div>
             <nav>
-                <a href="#">Wealth</a>
-                <a href="#">Crypto</a>
-                <a href="#">Cards</a>
-                <section class="cards-selector">
-    <h3>Mis Tarjetas de Interés</h3>
-    <p>Añade los modelos de tarjeta que quieras comparar.</p>
+    <a href="#">Wealth</a>
+    <a href="#">Crypto</a>
+    <a href="#">Cards</a>
+</nav>
     
     <div class="input-group">
         <input type="text" id="taskInput" placeholder="Ej: Visa Gold, Platinum...">
@@ -31,7 +29,17 @@
 <script src="app.js"></script>
             </nav>
             <a href="#login-modal" class="btn-dark" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; height: 40px; padding: 0 20px;">Log In</a>
-    </header>
+    </header> <section id="cards-section" class="cards-container">
+    <h2>Mis Tarjetas de Interés</h2>
+    <p>Añade los modelos de tarjeta que quieras comparar.</p>
+    
+    <div class="input-group">
+        <input type="text" id="taskInput" placeholder="Ej: Visa Gold, Platinum...">
+        <button id="addTaskBtn">Añadir a mi lista</button>
+    </div>
+
+    <ul id="taskList"></ul>
+</section>
 
     <div class="layout">
         <main>

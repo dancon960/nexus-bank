@@ -310,3 +310,20 @@ aside { flex: 1; }
 .btn-link:hover {
     color: white;
 }
+.cards-container {
+    padding: 60px 20px; /* Esto empuja el contenido hacia abajo */
+    background-color: #000;
+    color: white;
+    text-align: center;
+}
+
+#taskList li {
+    background: #1c1c1e; /* Gris oscuro tipo iPhone */
+    margin: 10px auto;
+    padding: 15px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 400px;
+    display: flex;
+    justify-content: space-between;
+}
