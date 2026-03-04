@@ -16,6 +16,19 @@
                 <a href="#">Wealth</a>
                 <a href="#">Crypto</a>
                 <a href="#">Cards</a>
+                <section class="cards-selector">
+    <h3>Mis Tarjetas de Interés</h3>
+    <p>Añade los modelos de tarjeta que quieras comparar.</p>
+    
+    <div class="input-group">
+        <input type="text" id="taskInput" placeholder="Ej: Visa Gold, Platinum...">
+        <button id="addTaskBtn">Añadir a mi lista</button>
+    </div>
+
+    <ul id="taskList"></ul>
+</section>
+
+<script src="app.js"></script>
             </nav>
             <a href="#login-modal" class="btn-dark" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; height: 40px; padding: 0 20px;">Log In</a>
     </header>
@@ -94,59 +107,5 @@
         </div>
     </form>
 </div>
-<script src="app.js"></script>
-// Elementos del DOM
-const taskInput = document.getElementById('taskInput');
-const addTaskBtn = document.getElementById('addTaskBtn');
-const taskList = document.getElementById('taskList');
-
-// Evento para añadir al hacer click
-addTaskBtn.addEventListener('click', () => {
-    const taskText = taskInput.value;
-    if (taskText === '') return; 
-
-    crearElementoTarea(taskText);
-    guardarTareas(); // Actualizamos el localstorage
-    taskInput.value = ''; 
-});
-
-// Función para montar el LI y el botón de borrar
-function crearElementoTarea(texto) {
-    const li = document.createElement('li');
-    li.textContent = texto;
-
-    const btnBorrar = document.createElement('button');
-    btnBorrar.textContent = 'Eliminar';
-    btnBorrar.onclick = () => {
-        li.remove();
-        guardarTareas(); 
-    };
-
-    li.appendChild(btnBorrar);
-    taskList.appendChild(li);
-}
-
-// Para que se guarden los datos en JSON
-function guardarTareas() {
-    const tareas = [];
-    document.querySelectorAll('#taskList li').forEach(li => {
-        tareas.push(li.firstChild.textContent);
-    });
-    localStorage.setItem('misTareas', JSON.stringify(tareas));
-}
-
-// Carga inicial al arrancar la web
-window.onload = () => {
-    const recuperadas = JSON.parse(localStorage.getItem('misTareas'));
-    if (recuperadas) {
-        recuperadas.forEach(t => crearElementoTarea(t));
-    }
-};
-window.onload = () => {
-    const tareasGuardadas = JSON.parse(localStorage.getItem('misTareas'));
-    if (tareasGuardadas) {
-        tareasGuardadas.forEach(texto => crearElementoTarea(texto));
-    }
-};
 </body>
 </html>
