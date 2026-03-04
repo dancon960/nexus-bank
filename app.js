@@ -1,51 +1,45 @@
-// Pillamos los elementos de la sección de tarjetas
-const inputTarjeta = document.getElementById('taskInput');
-const btnAnadir = document.getElementById('addTaskBtn');
-const listaTarjetas = document.getElementById('taskList');
+// Localizamos los elementos del HTML
+const selector = document.getElementById('planSelector');
+const botonActivar = document.getElementById('activateBtn');
+const cuadroDetalles = document.getElementById('planDetails');
 
-// Al hacer click, guardamos la tarjeta en la lista
-btnAnadir.addEventListener('click', () => {
-    const nombreTarjeta = inputTarjeta.value;
+// Información de los contratos (esto es lo que se guarda y se muestra)
+const ventajasPlan = {
+    "Standard": "Incluye pagos globales gratis, tarjeta virtual y soporte 24/7.",
+    "Silver": "Todo lo de Standard + Seguro de viajes y 1% de Cashback en compras.",
+    "Premium": "Todo lo de Silver + Acceso a Salas VIP en aeropuertos y transferencias gratis."
+};
+
+// Cuando el usuario elige un plan en el desplegable
+selector.addEventListener('change', () => {
+    const eleccion = selector.value;
     
-    // Si el cuadro está vacío, no hacemos nada
-    if (nombreTarjeta === '') return; 
-
-    crearItemTarjeta(nombreTarjeta);
-    guardarEnNavegador(); // Para que no se borre al refrescar la web
-    inputTarjeta.value = ''; // Limpiar el cuadro al terminar
+    // Cambiamos el texto de la caja de detalles
+    cuadroDetalles.innerHTML = `<p style="color:white;"><strong>Ventajas:</strong> ${ventajasPlan[eleccion]}</p>`;
 });
 
-// Esta función monta el elemento visual (el LI) con su botón de borrar
-function crearItemTarjeta(texto) {
-    const li = document.createElement('li');
-    li.textContent = texto;
-
-    const btnQuitar = document.createElement('button');
-    btnQuitar.textContent = 'Quitar';
+// Al pulsar el botón de Activar
+botonActivar.addEventListener('click', () => {
+    const planFinal = selector.value;
     
-    btnQuitar.onclick = () => {
-        li.remove();
-        guardarEnNavegador(); // Actualizar el storage al borrar
-    };
+    if (planFinal === "") {
+        alert("Por favor, selecciona un plan primero.");
+        return;
+    }
 
-    li.appendChild(btnQuitar);
-    listaTarjetas.appendChild(li);
-}
+    alert("¡Felicidades! Has activado el " + planFinal);
+    
+    // Guardamos la elección en la memoria del navegador (JSON)
+    localStorage.setItem('contratoActivo', planFinal);
+});
 
-// Guarda la lista en formato JSON para que sea persistente
-function guardarEnNavegador() {
-    const datos = [];
-    document.querySelectorAll('#taskList li').forEach(li => {
-        // Guardamos solo el texto de la tarjeta, sin el texto del botón
-        datos.push(li.firstChild.textContent);
-    });
-    localStorage.setItem('misTarjetasSeleccionadas', JSON.stringify(datos));
-}
-
-// Al cargar la página, recuperamos lo que hubiera guardado
+// Al cargar la página, comprobamos si ya había un plan guardado
 window.onload = () => {
-    const recuperadas = JSON.parse(localStorage.getItem('misTarjetasSeleccionadas'));
-    if (recuperadas) {
-        recuperadas.forEach(t => crearItemTarjeta(t));
+    const guardado = localStorage.getItem('contratoActivo');
+    
+    if (guardado) {
+        // Restauramos la selección y el texto de ventajas
+        selector.value = guardado;
+        cuadroDetalles.innerHTML = `<p style="color:white;">Plan actual: <strong>${guardado}</strong>. ${ventajasPlan[guardado]}</p>`;
     }
 };

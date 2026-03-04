@@ -13,33 +13,13 @@
         <div class="header-content">
             <div class="logo">NEXUS</div>
             <nav>
-    <a href="#">Wealth</a>
-    <a href="#">Crypto</a>
-    <a href="#">Cards</a>
-</nav>
-    
-    <div class="input-group">
-        <input type="text" id="taskInput" placeholder="Ej: Visa Gold, Platinum...">
-        <button id="addTaskBtn">Añadir a mi lista</button>
-    </div>
-
-    <ul id="taskList"></ul>
-</section>
-
-<script src="app.js"></script>
+                <a href="#">Wealth</a>
+                <a href="#">Crypto</a>
+                <a href="#">Cards</a>
             </nav>
             <a href="#login-modal" class="btn-dark" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; height: 40px; padding: 0 20px;">Log In</a>
-    </header> <section id="cards-section" class="cards-container">
-    <h2>Mis Tarjetas de Interés</h2>
-    <p>Añade los modelos de tarjeta que quieras comparar.</p>
-    
-    <div class="input-group">
-        <input type="text" id="taskInput" placeholder="Ej: Visa Gold, Platinum...">
-        <button id="addTaskBtn">Añadir a mi lista</button>
-    </div>
-
-    <ul id="taskList"></ul>
-</section>
+        </div>
+    </header>
 
     <div class="layout">
         <main>
@@ -49,7 +29,6 @@
                 <div class="cta-group">
                     <button class="btn-white">Abrir Cuenta</button>
                 </div>
-                
             </section>
 
             <section class="grid-info">
@@ -64,57 +43,77 @@
                     <p>Protección biométrica de nivel bancario.</p>
                 </article>
             </section>
-            </section> <section class="simulator-box">
-            <div class="sim-header">
-                <span>Tu futuro con NEXUS</span>
-                <h2>Tu dinero rinde más.</h2>
-            </div>
-            
-            <div class="graph-area">
-                <div class="bar-growth"></div>
-            </div>
 
-            <div class="sim-stats">
-                <div class="stat-item">
-                    <p>Interés actual</p>
-                    <h3 class="number-grow">4.0%</h3>
+            <section class="simulator-box">
+                <div class="sim-header">
+                    <span>Tu futuro con NEXUS</span>
+                    <h2>Tu dinero rinde más.</h2>
                 </div>
-                <div class="stat-item">
-                    <p>Estado</p>
-                    <h3 class="status-text">Creciendo</h3>
+                
+                <div class="graph-area">
+                    <div class="bar-growth"></div>
                 </div>
-            </div>
-        </section>
+
+                <div class="sim-stats">
+                    <div class="stat-item">
+                        <p>Interés actual</p>
+                        <h3 class="number-grow">4.0%</h3>
+                    </div>
+                    <div class="stat-item">
+                        <p>Estado</p>
+                        <h3 class="status-text">Creciendo</h3>
+                    </div>
+                </div>
+            </section>
+
+            <section id="plans-section" style="background: #1c1c1e; color: white; padding: 40px; border-radius: 20px; margin-top: 40px; text-align: center; border: 1px solid #333;">
+                <h2 style="font-size: 1.8rem; margin-bottom: 10px;">Mejora tu cuenta Nexus</h2>
+                <p style="color: #a1a1a6; margin-bottom: 30px;">Selecciona un contrato para ver tus ventajas.</p>
+
+                <div style="margin-bottom: 20px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
+                    <select id="planSelector" style="padding: 12px; border-radius: 10px; background: #2c2c2e; color: white; border: 1px solid #444; width: 220px; cursor: pointer;">
+                        <option value="" disabled selected>Elige tu plan...</option>
+                        <option value="Standard">Plan Standard (Gratis)</option>
+                        <option value="Silver">Plan Silver (4,99€/mes)</option>
+                        <option value="Premium">Plan Premium (13,99€/mes)</option>
+                    </select>
+
+                    <button id="activateBtn" style="padding: 12px 20px; border-radius: 10px; background: #fff; color: #000; font-weight: bold; cursor: pointer; border: none;">
+                        Activar Plan
+                    </button>
+                </div>
+
+                <div id="planDetails" style="margin-top: 20px; padding: 20px; background: #2c2c2e; border-radius: 15px; min-height: 50px; color: #a1a1a6; line-height: 1.5;">
+                    Selecciona un plan para ver los detalles del contrato.
+                </div>
+            </section>
         </main>
 
         <aside>
             <div class="app-promo">
                 <p>Escanea para descargar</p>
                 <div class="qr-placeholder">
-    <img src="fakeqr.jpg" alt="Código QR">
-</div>
-
-
+                    <img src="fakeqr.jpg" alt="Código QR" style="max-width: 100%;">
+                </div>
                 <span>Disponible en iOS y Android</span>
             </div>
         </aside>
     </div>
-<div id="login-modal" class="modal-overlay">
-    <div class="modal-content">
-    <a href="#" class="close-modal">&times;</a>
-    <h2>Acceso Clientes</h2>
-    <p>Introduce tus credenciales de NEXUS</p>
-    
-    <form class="login-form">
-        <input type="email" placeholder="Email o Usuario" class="input-field">
-        <input type="password" placeholder="Contraseña" class="input-field">
-        
-        <div class="form-actions">
-            <button type="submit" class="btn-dark">Entrar</button>
-            <a href="#" class="btn-link">¿No tienes cuenta? Regístrate</a>
+
+    <div id="login-modal" class="modal-overlay">
+        <div class="modal-content">
+            <a href="#" class="close-modal">&times;</a>
+            <h2>Acceso Clientes</h2>
+            <form class="login-form">
+                <input type="email" placeholder="Email o Usuario" class="input-field">
+                <input type="password" placeholder="Contraseña" class="input-field">
+                <div class="form-actions">
+                    <button type="submit" class="btn-dark">Entrar</button>
+                </div>
+            </form>
         </div>
-    </form>
-</div>
-<script src="app.js"></script>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
