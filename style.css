@@ -89,7 +89,7 @@ aside { flex: 1; }
     font-weight: 700;
     border-radius: 30px;
     cursor: pointer;
-    transition: transform 0.2s; /* BONUS: TRANSICION */
+    transition: transform 0.2s; /* TRANSICION */
 }
 
 .btn-white:hover { transform: scale(1.05); }
@@ -112,7 +112,6 @@ aside { flex: 1; }
     cursor: pointer;
 }
 
-/* Y añade justo debajo este bloque nuevo */
 .info-card:hover {
     border-color: #ffffff;
     transform: translateY(-10px);
@@ -195,7 +194,7 @@ aside { flex: 1; }
 }
 
 .simulator-box:hover .number-grow {
-    color: #00ff88; /* Verde éxito tipo Trade Republic */
+    color: #00ff88; /* Verde éxito */
     text-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
     transform: scale(1.1);
 }
@@ -267,10 +266,10 @@ aside { flex: 1; }
 
 .trend-up { color: #00ff88; }
 .trend-down { color: #ff4444; }
-/* --- ESTILOS DEL FORMULARIO DE LOGIN --- */
+/* ESTILOS DEL FORMULARIO DE LOGIN */
 .login-form {
     margin-top: 25px;
-    display: flex;         /* CUMPLE PUNTO 3 */
+    display: flex;         
     flex-direction: column;
     gap: 15px;
 }
