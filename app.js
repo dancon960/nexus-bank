@@ -72,3 +72,22 @@ window.onload = () => {
         listaBeneficios.innerHTML = listaHTML;
     }
 };
+// Pillamos el botón
+const botonTema = document.getElementById('themeToggle');
+
+// Al cargar la web, miramos si el usuario ACTIVÓ el modo claro a propósito
+window.addEventListener('load', () => {
+    if (localStorage.getItem('temaClaro') === 'true') {
+        document.body.classList.add('light-mode');
+    } else {
+        // Si no hay nada guardado, nos aseguramos de que NO tenga la clase clara
+        document.body.classList.remove('light-mode');
+    }
+});
+
+// El evento del botón sigue igual
+botonTema.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    const esClaroNow = document.body.classList.contains('light-mode');
+    localStorage.setItem('temaClaro', esClaroNow);
+});

@@ -309,3 +309,24 @@ aside { flex: 1; }
 .btn-link:hover {
     color: white;
 }
+/* Esto es lo que pasa cuando activamos el "light-mode" con el botón */
+body.light-mode {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+/* También hacemos que las cajas se vuelvan gris clarito para que se vean */
+body.light-mode .info-card, 
+body.light-mode .simulator-box, 
+body.light-mode #plans-section,
+body.light-mode .app-promo,
+body.light-mode .modal-content {
+    background-color: #f5f5f7 !important;
+    border-color: #d2d2d7 !important;
+    color: #000000 !important;
+}
+
+body.light-mode nav a, 
+body.light-mode .hero p {
+    color: #444 !important;
+}
