@@ -1,93 +1,74 @@
-// Primero, cogemos los elementos de la web para poder usarlos
+// Pillamos los elementos de la web que vamos a usar
 const selector = document.getElementById('planSelector');
 const botonActivar = document.getElementById('activateBtn');
 const cuadroDetalles = document.getElementById('planDetails');
 const listaBeneficios = document.getElementById('listaBeneficios');
+const botonModo = document.getElementById('themeToggle');
 
-// Aquí guardamos la información de lo que ofrece cada plan
-const infoPlanes = {
-    "Standard": ["Tarjeta virtual gratis", "Pagos globales", "Soporte básico"],
-    "Silver": ["Seguro de viajes", "Cashback del 1%", "Soporte 24/7"],
-    "Premium": ["Acceso a salas VIP", "Transferencias SWIFT gratis", "Seguro total"]
+// Los datos de los planes para que el JS sepa qué mostrar
+const planes = {
+    "Standard": ["Tarjeta gratis", "App móvil", "Soporte básico"],
+    "Silver": ["Cashback 1%", "Seguro de viaje", "Tarjeta metal"],
+    "Premium": ["Salas VIP", "Seguro total", "Gestor personal"]
 };
 
-// Esto se activa cada vez que el usuario elige un plan en la lista
+// Cada vez que cambias el plan en el selector...
 selector.addEventListener('change', () => {
-    const eleccion = selector.value;
+    const elegido = selector.value;
     
-    // Ponemos un texto que confirme qué plan ha elegido
-    cuadroDetalles.innerHTML = `<p style="color:white;">Has seleccionado: <strong>${eleccion}</strong></p>`;
-
-    // Aquí creamos los puntos de la lista con las ventajas automáticamente
-    let listaHTML = "<ul style='padding-left: 20px;'>";
+    // Ponemos un mensaje de confirmación
+    cuadroDetalles.innerHTML = `Has seleccionado el plan <span class="font-bold text-white dark:text-black">${elegido}</span>`;
     
-    // Recorremos la lista de ventajas del plan elegido y creamos los puntos
-    infoPlanes[eleccion].forEach(beneficio => {
-        listaHTML += `<li style='margin-bottom: 5px;'>${beneficio}</li>`;
+    // Creamos la lista de ventajas con checks verdes
+    let html = "<ul class='space-y-3'>";
+    planes[elegido].forEach(ventaja => {
+        html += `<li class="flex items-center gap-3 text-zinc-400 dark:text-zinc-600">
+                    <span class="text-green-500 font-bold">✓</span> ${ventaja}
+                 </li>`;
     });
+    html += "</ul>";
     
-    listaHTML += "</ul>";
-    
-    // Metemos esa lista en el hueco que hemos dejado en el HTML
-    listaBeneficios.innerHTML = listaHTML;
+    // Lo pintamos en la pantalla
+    listaBeneficios.innerHTML = html;
 });
 
-// Esto es lo que pasa cuando pulsas el botón "Activar Plan"
+// Cuando pulsas el botón de activar...
 botonActivar.addEventListener('click', () => {
     const planFinal = selector.value;
-    
-    if (planFinal === "") {
-        alert("Primero tienes que elegir un plan en la lista.");
-        return;
-    }
+    if (!planFinal) return alert("Por favor, selecciona un plan primero.");
 
-    // Creamos una ficha del contrato con el plan, la fecha y un número de ID
-    const contrato = {
-        plan: planFinal,
+    // Creamos un objeto con la info del contrato (Esto es el JSON)
+    const miContrato = {
+        nombre: planFinal,
         fecha: new Date().toLocaleDateString(),
-        idContrato: Math.floor(Math.random() * 5000) // Un número al azar para que parezca real
+        id: Math.floor(Math.random() * 9000)
     };
 
-    // Guardamos la ficha en la memoria del navegador (usando formato JSON)
-    localStorage.setItem('contratoNexus', JSON.stringify(contrato));
-    
-    alert("¡Contrato " + contrato.idContrato + " activado con éxito!");
+    // Lo guardamos en el navegador para que no se pierda al cerrar
+    localStorage.setItem('contratoNexus', JSON.stringify(miContrato));
+    alert("¡Felicidades! Tu plan " + planFinal + " ya está activo.");
 });
 
-// Cuando entras en la web o refrescas, miramos si ya tenías algo guardado
-window.onload = () => {
-    const guardado = JSON.parse(localStorage.getItem('contratoNexus'));
+// El interruptor para cambiar entre modo luz y oscuridad
+botonModo.addEventListener('click', () => {
+    // Le añadimos o quitamos la clase 'dark' al documento
+    document.documentElement.classList.toggle('dark');
     
+    // Guardamos qué modo prefiere el usuario
+    const esOscuro = document.documentElement.classList.contains('dark');
+    localStorage.setItem('preferenciaOscura', esOscuro);
+});
+
+// Al abrir la web, recuperamos los datos guardados
+window.onload = () => {
+    // Miramos si el usuario prefería el modo oscuro/claro
+    if (localStorage.getItem('preferenciaOscura') === 'true') {
+        document.documentElement.classList.add('dark');
+    }
+    
+    // Miramos si ya tenía un contrato activo
+    const guardado = JSON.parse(localStorage.getItem('contratoNexus'));
     if (guardado) {
-        // Si hay algo guardado, ponemos el selector y el texto como estaban
-        selector.value = guardado.plan;
-        cuadroDetalles.innerHTML = `<p style="color:#00ff00;">✓ Plan actual: ${guardado.plan} (ID: ${guardado.idContrato})</p>`;
-        
-        // También volvemos a pintar la lista de ventajas
-        let listaHTML = "<ul style='padding-left: 20px;'>";
-        infoPlanes[guardado.plan].forEach(beneficio => {
-            listaHTML += `<li>${beneficio}</li>`;
-        });
-        listaHTML += "</ul>";
-        listaBeneficios.innerHTML = listaHTML;
+        cuadroDetalles.innerHTML = `<span class="text-green-400 font-bold italic">✓ Tienes un contrato activo: ${guardado.nombre}</span>`;
     }
 };
-// Pillamos el botón
-const botonTema = document.getElementById('themeToggle');
-
-// Al cargar la web, miramos si el usuario ACTIVÓ el modo claro a propósito
-window.addEventListener('load', () => {
-    if (localStorage.getItem('temaClaro') === 'true') {
-        document.body.classList.add('light-mode');
-    } else {
-        // Si no hay nada guardado, nos aseguramos de que NO tenga la clase clara
-        document.body.classList.remove('light-mode');
-    }
-});
-
-// El evento del botón sigue igual
-botonTema.addEventListener('click', () => {
-    document.body.classList.toggle('light-mode');
-    const esClaroNow = document.body.classList.contains('light-mode');
-    localStorage.setItem('temaClaro', esClaroNow);
-});

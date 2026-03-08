@@ -3,114 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS BANK | Futuro</title>
-    <link rel="stylesheet" href="style.css">
+    <title>NEXUS BANK | Tailwind Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Configuración para que el modo oscuro funcione con clases
+        tailwind.config = {
+          darkMode: 'class',
+          theme: {
+            extend: {
+              colors: {
+                nexusBlack: '#000000',
+                nexusGray: '#111111',
+              }
+            }
+          }
+        }
+    </script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style> body { font-family: 'Inter', sans-serif; } </style>
 </head>
-<body>
+<body class="bg-black text-white transition-colors duration-300 dark:bg-white dark:text-black">
 
-    <header>
-        <div class="header-content">
-            <div class="logo">NEXUS</div>
-            <nav>
-                <a href="#">Wealth</a>
-                <a href="#">Crypto</a>
-                <a href="#">Cards</a>
-                <button id="themeToggle" style="background: none; border: 1px solid #444; color: white; padding: 5px 10px; border-radius: 15px; cursor: pointer; font-size: 0.8rem;">🌓 Modo</button>
+    <header class="border-b border-zinc-800 dark:border-zinc-200 py-5">
+        <div class="max-w-6xl mx-auto flex justify-between items-center px-6">
+            <div class="font-black text-xl tracking-tighter">NEXUS</div>
+            <nav class="hidden md:flex space-x-8 text-sm text-zinc-400 dark:text-zinc-500">
+                <a href="#" class="hover:text-white dark:hover:text-black">Wealth</a>
+                <a href="#" class="hover:text-white dark:hover:text-black">Crypto</a>
+                <a href="#" class="hover:text-white dark:hover:text-black">Cards</a>
+                <button id="themeToggle" class="border border-zinc-700 dark:border-zinc-300 px-3 py-1 rounded-full text-xs">🌓 Modo</button>
             </nav>
-            <a href="#login-modal" class="btn-dark" style="text-decoration: none; display: inline-flex; align-items: center; justify-content: center; height: 40px; padding: 0 20px;">Log In</a>
+            <a href="#login-modal" class="bg-zinc-800 text-white px-5 py-2 rounded-full text-sm font-medium dark:bg-zinc-200 dark:text-black">Log In</a>
         </div>
     </header>
 
-    <div class="layout">
-        <main>
-            <section class="hero">
-                <h1>El dinero,<br>evolucionado.</h1>
-                <p>Invierte, ahorra y gasta. Todo en NEXUS.</p>
-                <div class="cta-group">
-                    <button class="btn-white">Abrir Cuenta</button>
-                </div>
+    <div class="max-w-6xl mx-auto flex flex-col lg:flex-row gap-16 px-6 mt-16">
+        
+        <main class="flex-2">
+            <section class="mb-20">
+                <h1 class="text-7xl md:text-8xl font-black leading-[0.9] tracking-tighter mb-6">El dinero,<br>evolucionado.</h1>
+                <p class="text-2xl text-zinc-500 mb-10">Invierte, ahorra y gasta. Todo en NEXUS.</p>
+                <button class="bg-white text-black px-10 py-4 rounded-full font-bold text-lg hover:scale-105 transition-transform dark:bg-black dark:text-white">
+                    Abrir Cuenta
+                </button>
             </section>
 
-            <section class="grid-info">
-                <article class="info-card">
-                    <span>Interés</span>
-                    <h3>4.0% TAE</h3>
-                    <p>Por tu efectivo. Sin límites.</p>
+            <section class="flex gap-6 mb-16">
+                <article class="flex-1 bg-zinc-900 border border-zinc-800 p-8 rounded-[2rem] transition-all duration-300 cursor-pointer hover:border-white hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(255,255,255,0.1)] dark:bg-zinc-100 dark:border-zinc-200 dark:hover:border-black">
+                    <span class="text-xs uppercase text-zinc-500 font-bold tracking-widest">Interés</span>
+                    <h3 class="text-4xl font-bold my-4">4.0% TAE</h3>
+                    <p class="text-zinc-500">Por tu efectivo. Sin límites.</p>
                 </article>
-                <article class="info-card">
-                    <span>Seguridad</span>
-                    <h3>OLED Security</h3>
-                    <p>Protección biométrica de nivel bancario.</p>
+
+                <article class="flex-1 bg-zinc-900 border border-zinc-800 p-8 rounded-[2rem] transition-all duration-300 cursor-pointer hover:border-white hover:-translate-y-2 hover:shadow-[0_10px_30px_rgba(255,255,255,0.1)] dark:bg-zinc-100 dark:border-zinc-200 dark:hover:border-black">
+                    <span class="text-xs uppercase text-zinc-500 font-bold tracking-widest">Seguridad</span>
+                    <h3 class="text-4xl font-bold my-4">OLED Sec.</h3>
+                    <p class="text-zinc-500">Protección avanzada de nivel bancario.</p>
                 </article>
             </section>
 
-            <section class="simulator-box">
-                <div class="sim-header">
-                    <span>Tu futuro con NEXUS</span>
-                    <h2>Tu dinero rinde más.</h2>
-                </div>
-                <div class="graph-area">
-                    <div class="bar-growth"></div>
-                </div>
-                <div class="sim-stats">
-                    <div class="stat-item">
-                        <p>Interés actual</p>
-                        <h3 class="number-grow">4.0%</h3>
-                    </div>
-                    <div class="stat-item">
-                        <p>Estado</p>
-                        <h3 class="status-text">Creciendo</h3>
-                    </div>
-                </div>
-            </section>
+            <section id="plans-section" class="bg-zinc-900 border border-zinc-800 p-10 rounded-[2rem] dark:bg-zinc-100 dark:border-zinc-200">
+                <h2 class="text-2xl font-bold mb-2">Elige tu contrato</h2>
+                <p class="text-zinc-500 mb-8">Selecciona un plan para ver tus ventajas.</p>
 
-            <section id="plans-section" style="background: #1c1c1e; color: white; padding: 40px; border-radius: 20px; margin-top: 40px; text-align: center; border: 1px solid #333;">
-                <h2 style="font-size: 1.8rem; margin-bottom: 10px;">Mejora tu cuenta Nexus</h2>
-                <p style="color: #a1a1a6; margin-bottom: 30px;">Selecciona un contrato para ver tus ventajas.</p>
-
-                <div style="margin-bottom: 20px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-                    <select id="planSelector" style="padding: 12px; border-radius: 10px; background: #2c2c2e; color: white; border: 1px solid #444; width: 220px; cursor: pointer;">
-                        <option value="" disabled selected>Elige tu plan...</option>
+                <div class="flex flex-wrap gap-4 mb-8">
+                    <select id="planSelector" class="bg-zinc-800 border border-zinc-700 text-white p-3 rounded-xl flex-1 min-w-[200px] dark:bg-white dark:text-black dark:border-zinc-300">
+                        <option value="" disabled selected>Selecciona un plan...</option>
                         <option value="Standard">Plan Standard (Gratis)</option>
                         <option value="Silver">Plan Silver (4,99€/mes)</option>
                         <option value="Premium">Plan Premium (13,99€/mes)</option>
                     </select>
-                    <button id="activateBtn" style="padding: 12px 20px; border-radius: 10px; background: #fff; color: #000; font-weight: bold; cursor: pointer; border: none;">
-                        Activar Plan
+                    <button id="activateBtn" class="bg-white text-black px-8 py-3 rounded-xl font-bold dark:bg-black dark:text-white">
+                        Suscribirse
                     </button>
                 </div>
 
-                <div id="listaBeneficios" style="margin-top: 15px; text-align: left; font-size: 0.9em; border-top: 1px solid #444; padding-top: 15px; color: #a1a1a6;">
+                <div id="listaBeneficios" class="border-t border-zinc-800 dark:border-zinc-200 pt-6">
                     </div>
 
-                <div id="planDetails" style="margin-top: 20px; padding: 20px; background: #2c2c2e; border-radius: 15px; min-height: 50px; color: #a1a1a6;">
-                    Selecciona un plan para ver los detalles del contrato.
+                <div id="planDetails" class="mt-6 text-zinc-500">
+                    Detalles del contrato.
                 </div>
             </section>
         </main>
 
-        <aside>
-            <div class="app-promo">
-                <p>Escanea para descargar</p>
-                <div class="qr-placeholder">
-                    <img src="fakeqr.jpg" alt="Código QR" style="max-width: 100%;">
+        <aside class="flex-1">
+            <div class="sticky top-10 bg-zinc-900 border border-zinc-800 p-10 rounded-[2rem] text-center dark:bg-zinc-100 dark:border-zinc-200">
+                <p class="mb-6 font-medium">Descarga la App</p>
+                <div class="w-32 h-32 bg-white mx-auto rounded-2xl mb-6 p-2">
+                    <img src="fakeqr.jpg" alt="QR" class="w-full h-full object-cover">
                 </div>
-                <span>Disponible en iOS y Android</span>
+                <span class="text-xs text-zinc-500">Disponible en iOS y Android</span>
             </div>
         </aside>
     </div>
 
-    <div id="login-modal" class="modal-overlay">
-        <div class="modal-content">
-            <a href="#" class="close-modal">&times;</a>
-            <h2>Acceso Clientes</h2>
-            <form class="login-form">
-                <input type="email" placeholder="Email o Usuario" class="input-field">
-                <input type="password" placeholder="Contraseña" class="input-field">
-                <div class="form-actions">
-                    <button type="submit" class="btn-dark">Entrar</button>
-                </div>
+    <div id="login-modal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50 target:flex">
+        <div class="bg-zinc-900 border border-zinc-800 p-10 rounded-[2.5rem] w-full max-w-sm relative dark:bg-white dark:border-zinc-200">
+            <a href="#" class="absolute top-6 right-6 text-2xl">&times;</a>
+            <h2 class="text-2xl font-bold mb-8 text-center">Acceso Clientes</h2>
+            <form class="flex flex-col gap-4">
+                <input type="email" placeholder="Email" class="bg-zinc-800 border border-zinc-700 p-4 rounded-2xl dark:bg-zinc-100 dark:border-zinc-200">
+                <input type="password" placeholder="Password" class="bg-zinc-800 border border-zinc-700 p-4 rounded-2xl dark:bg-zinc-100 dark:border-zinc-200">
+                <button class="bg-white text-black font-bold p-4 rounded-2xl mt-4 dark:bg-black dark:text-white">Entrar</button>
             </form>
         </div>
     </div>
