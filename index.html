@@ -85,6 +85,47 @@
                     Detalles del contrato.
                 </div>
             </section>
+            <section class="mt-12 bg-zinc-900 border border-zinc-800 p-8 rounded-[2rem] dark:bg-zinc-100 dark:border-zinc-200">
+    <h2 class="text-2xl font-bold mb-6">Actividad Reciente</h2>
+    
+    <div class="flex flex-col md:flex-row gap-4 mb-8">
+        <input type="text" id="busqueda" placeholder="Buscar movimiento..." class="bg-zinc-800 border border-zinc-700 p-3 rounded-xl flex-1 dark:bg-white dark:border-zinc-300 dark:text-black">
+        <div class="flex gap-2">
+            <button onclick="filtrarMovimientos('todos')" class="bg-zinc-800 px-4 py-2 rounded-lg text-xs font-bold hover:bg-zinc-700 dark:bg-zinc-200 dark:text-black">Todos</button>
+            <button onclick="filtrarMovimientos('ingreso')" class="bg-green-900/30 text-green-400 px-4 py-2 rounded-lg text-xs font-bold hover:bg-green-900/50">Ingresos</button>
+            <button onclick="filtrarMovimientos('gasto')" class="bg-red-900/30 text-red-400 px-4 py-2 rounded-lg text-xs font-bold hover:bg-red-900/50">Gastos</button>
+        </div>
+    </div>
+
+    <form id="formMovimiento" class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8 border-b border-zinc-800 pb-8 dark:border-zinc-200">
+        <input type="text" id="tituloMov" placeholder="Concepto (ej: Apple Store)" required class="bg-zinc-800 border border-zinc-700 p-3 rounded-xl dark:bg-white dark:border-zinc-300 dark:text-black">
+        <input type="number" id="cantidadMov" placeholder="Cantidad (€)" required class="bg-zinc-800 border border-zinc-700 p-3 rounded-xl dark:bg-white dark:border-zinc-300 dark:text-black">
+        <button type="submit" class="bg-white text-black font-bold rounded-xl dark:bg-black dark:text-white hover:scale-105 transition-transform">Añadir Registro</button>
+    </form>
+
+    <div id="listaMovimientos" class="space-y-4">
+        </div>
+
+    <div class="mt-8 p-6 bg-black rounded-2xl flex justify-around text-center dark:bg-zinc-200">
+        <div>
+            <p class="text-zinc-500 text-xs uppercase font-bold">Total</p>
+            <p id="statTotal" class="text-xl font-black">0.00€</p>
+        </div>
+        <div>
+            <p class="text-zinc-500 text-xs uppercase font-bold text-green-500">Ingresos</p>
+            <p id="statIngresos" class="text-xl font-black text-green-500">0.00€</p>
+        </div>
+        <div>
+            <p class="text-zinc-500 text-xs uppercase font-bold text-red-500">Gastos</p>
+            <p id="statGastos" class="text-xl font-black text-red-500">0.00€</p>
+        </div>
+    </div>
+<section id="seccionPrivada" class="hidden mt-12 bg-zinc-900 border border-zinc-800 p-8 rounded-[2rem] dark:bg-zinc-100 dark:border-zinc-200">
+    </section>
+
+<div id="mensajeLogin" class="mt-12 text-center p-10 border border-dashed border-zinc-800 rounded-[2rem]">
+    <p class="text-zinc-500 italic">Inicia sesión para ver tu actividad bancaria.</p>
+</div>
         </main>
 
         <aside class="flex-1">

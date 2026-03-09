@@ -72,3 +72,133 @@ window.onload = () => {
         cuadroDetalles.innerHTML = `<span class="text-green-400 font-bold italic">✓ Tienes un contrato activo: ${guardado.nombre}</span>`;
     }
 };
+// --- LÓGICA DE MOVIMIENTOS ---
+
+let movimientos = JSON.parse(localStorage.getItem('movimientosNexus')) || [];
+
+const formMov = document.getElementById('formMovimiento');
+const listaMov = document.getElementById('listaMovimientos');
+const inputBusqueda = document.getElementById('busqueda');
+
+// Función para guardar y pintar todo
+function actualizarInterfaz(datos = movimientos) {
+    // Guardamos en LocalStorage (Punto 7)
+    localStorage.setItem('movimientosNexus', JSON.stringify(movimientos));
+    
+    // Limpiamos la lista antes de pintar
+    listaMov.innerHTML = '';
+    
+    let total = 0;
+    let ingresos = 0;
+    let gastos = 0;
+
+    datos.forEach(m => {
+        const valor = parseFloat(m.cantidad);
+        const esGasto = valor < 0;
+        
+        // Sumamos para las estadísticas (Punto 3)
+        total += valor;
+        if(esGasto) gastos += Math.abs(valor);
+        else ingresos += valor;
+
+        // Creamos el HTML de cada fila (Punto 6)
+        const item = document.createElement('div');
+        item.className = `flex justify-between items-center p-4 bg-zinc-800/50 rounded-xl border border-zinc-800 dark:bg-white dark:border-zinc-200`;
+        item.innerHTML = `
+            <div>
+                <p class="font-bold">${m.titulo}</p>
+                <p class="text-xs text-zinc-500">${m.fecha}</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="font-black ${esGasto ? 'text-red-400' : 'text-green-400'}">${valor.toFixed(2)}€</span>
+                <button onclick="eliminarMovimiento('${m.id}')" class="text-zinc-600 hover:text-white">✕</button>
+            </div>
+        `;
+        listaMov.appendChild(item);
+    });
+
+    // Actualizamos los numeritos de las estadísticas
+    document.getElementById('statTotal').innerText = `${total.toFixed(2)}€`;
+    document.getElementById('statIngresos').innerText = `${ingresos.toFixed(2)}€`;
+    document.getElementById('statGastos').innerText = `${gastos.toFixed(2)}€`;
+}
+
+// Añadir un movimiento nuevo
+formMov.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const nuevoMov = {
+        id: Date.now().toString(),
+        titulo: document.getElementById('tituloMov').value,
+        cantidad: document.getElementById('cantidadMov').value,
+        fecha: new Date().toLocaleDateString()
+    };
+
+    movimientos.push(nuevoMov);
+    formMov.reset();
+    actualizarInterfaz();
+});
+
+// Eliminar (Punto 6)
+function eliminarMovimiento(id) {
+    movimientos = movimientos.filter(m => m.id !== id);
+    actualizarInterfaz();
+}
+
+// Filtrar (Ingresos / Gastos)
+function filtrarMovimientos(tipo) {
+    if (tipo === 'todos') {
+        actualizarInterfaz(movimientos);
+    } else {
+        const filtrados = movimientos.filter(m => {
+            return tipo === 'gasto' ? m.cantidad < 0 : m.cantidad >= 0;
+        });
+        actualizarInterfaz(filtrados);
+    }
+}
+
+// Buscador por texto (Punto 8)
+inputBusqueda.addEventListener('input', () => {
+    const texto = inputBusqueda.value.toLowerCase();
+    const filtrados = movimientos.filter(m => 
+        m.titulo.toLowerCase().includes(texto)
+    );
+    actualizarInterfaz(filtrados);
+});
+
+// Al arrancar, cargamos lo que haya
+actualizarInterfaz();
+// Buscamos el formulario del modal de login
+const formLogin = document.querySelector('#login-modal form');
+const seccionPrivada = document.getElementById('seccionPrivada');
+const mensajeLogin = document.getElementById('mensajeLogin');
+
+formLogin.addEventListener('submit', (e) => {
+    e.preventDefault(); // Evitamos que la página se recargue
+    
+    // Pillamos el email para simular el nombre de usuario
+    const email = formLogin.querySelector('input[type="email"]').value;
+    const nombreUsuario = email.split('@')[0]; // Sacamos el nombre antes del @
+
+    // Guardamos en LocalStorage que ya estamos dentro (Punto 7)
+    localStorage.setItem('usuarioNexus', nombreUsuario);
+    
+    // Cerramos el modal (usando el truco del hash vacío)
+    window.location.hash = ''; 
+    
+    alert(`Bienvenido de nuevo, ${nombreUsuario}`);
+    comprobarSesion();
+});
+
+function comprobarSesion() {
+    const usuarioCargado = localStorage.getItem('usuarioNexus');
+    
+    if (usuarioCargado) {
+        // Si hay usuario, mostramos los movimientos y quitamos el mensaje
+        seccionPrivada.classList.remove('hidden');
+        mensajeLogin.classList.add('hidden');
+    }
+}
+
+// Llamamos a la función al cargar la página
+window.addEventListener('load', comprobarSesion);
