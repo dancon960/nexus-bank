@@ -1,5 +1,5 @@
 🏦 Nexus Bank - Fintech Landing Page
-Este proyecto es una Landing Page interactiva para un banco digital ficticio, desarrollada como parte del Grado Superior en DAM. El objetivo principal fue implementar una estructura web semántica, un diseño moderno "Mobile First" y un flujo de despliegue continuo (CI/CD).
+Este proyecto es una Landing Page interactiva para un banco digital ficticio, desarrollada como parte del Grado Superior en DAM. El objetivo principal fue implementar una estructura web, un diseño moderno "Mobile First" y un flujo de despliegue continuo (CI/CD).
 
 🚀 Tecnologías y Herramientas
 

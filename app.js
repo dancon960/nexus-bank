@@ -66,6 +66,10 @@ window.onload = () => {
         document.documentElement.classList.add('dark');
     }
     
+    // Indicamos en la consola en qué modo estamos
+    const modoActual = document.documentElement.classList.contains('dark') ? 'oscuro' : 'claro';
+    console.log(`La página se ha cargado en modo ${modoActual}.`);
+    
     // Miramos si ya tenía un contrato activo
     const guardado = JSON.parse(localStorage.getItem('contratoNexus'));
     if (guardado) {
@@ -202,3 +206,15 @@ function comprobarSesion() {
 
 // Llamamos a la función al cargar la página
 window.addEventListener('load', comprobarSesion);
+
+// Función para exportar todos los movimientos a un archivo CSV
+function exportarCSV() {
+    const movimientos = JSON.parse(localStorage.getItem('movimientosNexus')) || [];
+    const csvContent = "data:text/csv;charset=utf-8," + movimientos.map(m => `${m.titulo},${m.cantidad},${m.fecha}`).join("\n");
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", "movimientos_nexus.csv");
+    document.body.appendChild(link);
+    link.click();
+}
