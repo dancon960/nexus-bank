@@ -1,220 +1,283 @@
-// Pillamos los elementos de la web que vamos a usar
-const selector = document.getElementById('planSelector');
-const botonActivar = document.getElementById('activateBtn');
-const cuadroDetalles = document.getElementById('planDetails');
-const listaBeneficios = document.getElementById('listaBeneficios');
-const botonModo = document.getElementById('themeToggle');
+// Seleccionamos los elementos principales de la interfaz
+const planSelector = document.getElementById('planSelector');
+const activateButton = document.getElementById('activateBtn');
+const planDetailsBox = document.getElementById('planDetails');
+const benefitsList = document.getElementById('listaBeneficios');
+const themeToggleButton = document.getElementById('themeToggle');
 
-// Los datos de los planes para que el JS sepa qué mostrar
-const planes = {
-    "Standard": ["Tarjeta gratis", "App móvil", "Soporte básico"],
-    "Silver": ["Cashback 1%", "Seguro de viaje", "Tarjeta metal"],
-    "Premium": ["Salas VIP", "Seguro total", "Gestor personal"]
+// Detalles de cada plan para mostrar en la UI
+const plansInfo = {
+    Standard: ["Tarjeta gratis", "App móvil", "Soporte básico"],
+    Silver: ["Cashback 1%", "Seguro de viaje", "Tarjeta metal"],
+    Premium: ["Salas VIP", "Seguro total", "Gestor personal"]
 };
 
-// Cada vez que cambias el plan en el selector...
-selector.addEventListener('change', () => {
-    const elegido = selector.value;
+// Evento: selección de plan
+planSelector.addEventListener('change', () => {
+    const selectedPlan = planSelector.value;
     
-    // Ponemos un mensaje de confirmación
-    cuadroDetalles.innerHTML = `Has seleccionado el plan <span class="font-bold text-white dark:text-black">${elegido}</span>`;
+    // Muestra mensaje de confirmación de selección
+    planDetailsBox.innerHTML = `Has seleccionado el plan <span class="font-bold text-white dark:text-black">${selectedPlan}</span>`;
     
-    // Creamos la lista de ventajas con checks verdes
-    let html = "<ul class='space-y-3'>";
-    planes[elegido].forEach(ventaja => {
-        html += `<li class="flex items-center gap-3 text-zinc-400 dark:text-zinc-600">
-                    <span class="text-green-500 font-bold">✓</span> ${ventaja}
+    // Crea la lista de beneficios con check verde
+    let benefitsHtml = "<ul class='space-y-3'>";
+    plansInfo[selectedPlan].forEach(benefit => {
+        benefitsHtml += `<li class="flex items-center gap-3 text-zinc-400 dark:text-zinc-600">
+                    <span class="text-green-500 font-bold">✓</span> ${benefit}
                  </li>`;
     });
-    html += "</ul>";
+    benefitsHtml += "</ul>";
     
-    // Lo pintamos en la pantalla
-    listaBeneficios.innerHTML = html;
+    // Inserta en la interfaz
+    benefitsList.innerHTML = benefitsHtml;
 });
 
-// Cuando pulsas el botón de activar...
-botonActivar.addEventListener('click', () => {
-    const planFinal = selector.value;
-    if (!planFinal) return alert("Por favor, selecciona un plan primero.");
+// Evento: activar plan
+activateButton.addEventListener('click', () => {
+    const selectedPlan = planSelector.value;
+    if (!selectedPlan) return alert("Por favor, selecciona un plan primero.");
 
-    // Creamos un objeto con la info del contrato (Esto es el JSON)
-    const miContrato = {
-        nombre: planFinal,
+    // Objeto con la información del contrato
+    const contractInfo = {
+        nombre: selectedPlan,
         fecha: new Date().toLocaleDateString(),
         id: Math.floor(Math.random() * 9000)
     };
 
-    // Lo guardamos en el navegador para que no se pierda al cerrar
-    localStorage.setItem('contratoNexus', JSON.stringify(miContrato));
-    alert("¡Felicidades! Tu plan " + planFinal + " ya está activo.");
+    // Guarda el contrato en localStorage
+    localStorage.setItem('contratoNexus', JSON.stringify(contractInfo));
+    alert("¡Felicidades! Tu plan " + selectedPlan + " ya está activo.");
 });
 
-// El interruptor para cambiar entre modo luz y oscuridad
-botonModo.addEventListener('click', () => {
-    // Le añadimos o quitamos la clase 'dark' al documento
+// Evento: alternar entre modo claro/oscuro
+themeToggleButton.addEventListener('click', () => {
+    // Alterna la clase 'dark' en el documento
     document.documentElement.classList.toggle('dark');
     
-    // Guardamos qué modo prefiere el usuario
-    const esOscuro = document.documentElement.classList.contains('dark');
-    localStorage.setItem('preferenciaOscura', esOscuro);
+    // Guarda la preferencia del modo en localStorage
+    const isDarkMode = document.documentElement.classList.contains('dark');
+    localStorage.setItem('preferenciaOscura', isDarkMode);
 });
 
-// Al abrir la web, recuperamos los datos guardados
-window.onload = () => {
-    // Miramos si el usuario prefería el modo oscuro/claro
+/**
+ * Inicializa el modo de tema de la página según preferencia guardada.
+ * Si está activada la preferencia de modo oscuro, aplica la clase 'dark'.
+ */
+function initThemePreference() {
     if (localStorage.getItem('preferenciaOscura') === 'true') {
         document.documentElement.classList.add('dark');
     }
-    
-    // Indicamos en la consola en qué modo estamos
-    const modoActual = document.documentElement.classList.contains('dark') ? 'oscuro' : 'claro';
-    console.log(`La página se ha cargado en modo ${modoActual}.`);
-    
-    // Miramos si ya tenía un contrato activo
-    const guardado = JSON.parse(localStorage.getItem('contratoNexus'));
-    if (guardado) {
-        cuadroDetalles.innerHTML = `<span class="text-green-400 font-bold italic">✓ Tienes un contrato activo: ${guardado.nombre}</span>`;
-    }
-};
-// --- LÓGICA DE MOVIMIENTOS ---
-
-let movimientos = JSON.parse(localStorage.getItem('movimientosNexus')) || [];
-
-const formMov = document.getElementById('formMovimiento');
-const listaMov = document.getElementById('listaMovimientos');
-const inputBusqueda = document.getElementById('busqueda');
-
-// Función para guardar y pintar todo
-function actualizarInterfaz(datos = movimientos) {
-    // Guardamos en LocalStorage (Punto 7)
-    localStorage.setItem('movimientosNexus', JSON.stringify(movimientos));
-    
-    // Limpiamos la lista antes de pintar
-    listaMov.innerHTML = '';
-    
-    let total = 0;
-    let ingresos = 0;
-    let gastos = 0;
-
-    datos.forEach(m => {
-        const valor = parseFloat(m.cantidad);
-        const esGasto = valor < 0;
-        
-        // Sumamos para las estadísticas (Punto 3)
-        total += valor;
-        if(esGasto) gastos += Math.abs(valor);
-        else ingresos += valor;
-
-        // Creamos el HTML de cada fila (Punto 6)
-        const item = document.createElement('div');
-        item.className = `flex justify-between items-center p-4 bg-zinc-800/50 rounded-xl border border-zinc-800 dark:bg-white dark:border-zinc-200`;
-        item.innerHTML = `
-            <div>
-                <p class="font-bold">${m.titulo}</p>
-                <p class="text-xs text-zinc-500">${m.fecha}</p>
-            </div>
-            <div class="flex items-center gap-4">
-                <span class="font-black ${esGasto ? 'text-red-400' : 'text-green-400'}">${valor.toFixed(2)}€</span>
-                <button onclick="eliminarMovimiento('${m.id}')" class="text-zinc-600 hover:text-white">✕</button>
-            </div>
-        `;
-        listaMov.appendChild(item);
-    });
-
-    // Actualizamos los numeritos de las estadísticas
-    document.getElementById('statTotal').innerText = `${total.toFixed(2)}€`;
-    document.getElementById('statIngresos').innerText = `${ingresos.toFixed(2)}€`;
-    document.getElementById('statGastos').innerText = `${gastos.toFixed(2)}€`;
 }
 
-// Añadir un movimiento nuevo
-formMov.addEventListener('submit', (e) => {
+/**
+ * Carga datos previos del usuario: si hay un contrato activo, muestra el aviso
+ * y deja registro en consola del modo actual.
+ * Solo se ejecuta al cargar la web inicialmente.
+ */
+function loadPreviousUserData() {
+    const currentTheme = document.documentElement.classList.contains('dark') ? 'oscuro' : 'claro';
+    console.log(`La página se ha cargado en modo ${currentTheme}.`);
+
+    const storedContract = JSON.parse(localStorage.getItem('contratoNexus'));
+    if (storedContract) {
+        planDetailsBox.innerHTML = `<span class="text-green-400 font-bold italic">✓ Tienes un contrato activo: ${storedContract.nombre}</span>`;
+    }
+}
+
+// Evento de carga: inicializa el tema y carga datos previos
+window.onload = () => {
+    initThemePreference();
+    loadPreviousUserData();
+}
+    
+    // Código legado/redundante (puede eliminarse si loadPreviousUserData se llama solo):
+    const currentTheme = document.documentElement.classList.contains('dark') ? 'oscuro' : 'claro';
+    console.log(`La página se ha cargado en modo ${currentTheme}.`);
+    const storedContract = JSON.parse(localStorage.getItem('contratoNexus'));
+    if (storedContract) {
+        planDetailsBox.innerHTML = `<span class="text-green-400 font-bold italic">✓ Tienes un contrato activo: ${storedContract.nombre}</span>`;
+    }
+
+// --- LÓGICA DE MOVIMIENTOS ---
+
+let movimientosList = JSON.parse(localStorage.getItem('movimientosNexus')) || [];
+
+const movimientoForm = document.getElementById('formMovimiento');
+const movimientosContainer = document.getElementById('listaMovimientos');
+const searchInput = document.getElementById('busqueda');
+
+/**
+ * Guarda el array de movimientos en localStorage
+ * y renderiza la interfaz de movimientos y estadísticas.
+ * @param {Array} data - Lista de movimientos a mostrar (opcional)
+ */
+function updateMovementsUI(data = movimientosList) {
+    // Guarda en localStorage
+    localStorage.setItem('movimientosNexus', JSON.stringify(movimientosList));
+    
+    // Limpia la UI antes de pintar
+    movimientosContainer.innerHTML = '';
+    
+    let totalBalance = 0;
+    let ingresosSum = 0;
+    let gastosSum = 0;
+
+    data.forEach(mov => {
+        const amount = parseFloat(mov.cantidad);
+        const isExpense = amount < 0;
+        
+        // Cálculo de estadísticas
+        totalBalance += amount;
+        if (isExpense) gastosSum += Math.abs(amount);
+        else ingresosSum += amount;
+
+        // CREA EL ITEM DE MOVIMIENTO
+        const movElem = document.createElement('div');
+        movElem.className = `flex justify-between items-center p-4 bg-zinc-800/50 rounded-xl border border-zinc-800 dark:bg-white dark:border-zinc-200`;
+        movElem.innerHTML = `
+            <div>
+                <p class="font-bold">${mov.titulo}</p>
+                <p class="text-xs text-zinc-500">${mov.fecha}</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <span class="font-black ${isExpense ? 'text-red-400' : 'text-green-400'}">${amount.toFixed(2)}€</span>
+                <button onclick="eliminarMovimiento('${mov.id}')" class="text-zinc-600 hover:text-white">✕</button>
+            </div>
+        `;
+        movimientosContainer.appendChild(movElem);
+    });
+
+    // Actualiza estadísticas en pantalla
+    document.getElementById('statTotal').innerText = `${totalBalance.toFixed(2)}€`;
+    document.getElementById('statIngresos').innerText = `${ingresosSum.toFixed(2)}€`;
+    document.getElementById('statGastos').innerText = `${gastosSum.toFixed(2)}€`;
+}
+
+/**
+ * Maneja el envío del formulario de movimientos:
+ * - Valida: mínimo 3 caracteres en el título y cantidad > 0
+ * - Si la validación falla, muestra un alert y no agrega el movimiento
+ */
+movimientoForm.addEventListener('submit', (e) => {
     e.preventDefault();
     
-    const nuevoMov = {
+    const movTitle = document.getElementById('tituloMov').value.trim();
+    const cantidadStr = document.getElementById('cantidadMov').value;
+    const movAmount = parseFloat(cantidadStr);
+
+    // Validación de título
+    if (movTitle.length < 3) {
+        alert('El título debe tener al menos 3 caracteres.');
+        return;
+    }
+
+    // Validación de cantidad
+    if (isNaN(movAmount) || movAmount <= 0) {
+        alert('La cantidad debe ser un número mayor que 0.');
+        return;
+    }
+
+    const newMovement = {
         id: Date.now().toString(),
-        titulo: document.getElementById('tituloMov').value,
-        cantidad: document.getElementById('cantidadMov').value,
+        titulo: movTitle,
+        cantidad: movAmount,
         fecha: new Date().toLocaleDateString()
     };
 
-    movimientos.push(nuevoMov);
-    formMov.reset();
-    actualizarInterfaz();
+    movimientosList.push(newMovement);
+    movimientoForm.reset();
+    updateMovementsUI();
 });
 
-// Eliminar (Punto 6)
+/**
+ * Elimina un movimiento del listado según su ID
+ * y actualiza la interfaz (botón de la x de cada movimiento)
+ * @param {string} id - ID del movimiento a eliminar
+ */
 function eliminarMovimiento(id) {
-    movimientos = movimientos.filter(m => m.id !== id);
-    actualizarInterfaz();
+    movimientosList = movimientosList.filter(mov => mov.id !== id);
+    updateMovementsUI();
 }
 
-// Filtrar (Ingresos / Gastos)
+/**
+ * Filtra los movimientos por tipo y actualiza la interfaz.
+ * @param {'todos'|'ingreso'|'gasto'} tipo - Tipo a filtrar
+ */
 function filtrarMovimientos(tipo) {
-    if (tipo === 'todos') {
-        actualizarInterfaz(movimientos);
-    } else {
-        const filtrados = movimientos.filter(m => {
-            return tipo === 'gasto' ? m.cantidad < 0 : m.cantidad >= 0;
-        });
-        actualizarInterfaz(filtrados);
-    }
+    const filtered = tipo === 'todos'
+        ? movimientosList
+        : movimientosList.filter(mov => tipo === 'gasto' ? mov.cantidad < 0 : mov.cantidad >= 0);
+    updateMovementsUI(filtered);
 }
 
-// Buscador por texto (Punto 8)
-inputBusqueda.addEventListener('input', () => {
-    const texto = inputBusqueda.value.toLowerCase();
-    const filtrados = movimientos.filter(m => 
-        m.titulo.toLowerCase().includes(texto)
+// Evento: búsqueda de movimientos por texto
+searchInput.addEventListener('input', () => {
+    const term = searchInput.value.toLowerCase();
+    const filteredMovements = movimientosList.filter(mov => 
+        mov.titulo.toLowerCase().includes(term)
     );
-    actualizarInterfaz(filtrados);
+    updateMovementsUI(filteredMovements);
 });
 
-// Al arrancar, cargamos lo que haya
-actualizarInterfaz();
-// Buscamos el formulario del modal de login
-const formLogin = document.querySelector('#login-modal form');
-const seccionPrivada = document.getElementById('seccionPrivada');
-const mensajeLogin = document.getElementById('mensajeLogin');
+// Inicializa la interfaz de movimientos al arrancar la app
+updateMovementsUI();
 
-formLogin.addEventListener('submit', (e) => {
-    e.preventDefault(); // Evitamos que la página se recargue
-    
-    // Pillamos el email para simular el nombre de usuario
-    const email = formLogin.querySelector('input[type="email"]').value;
-    const nombreUsuario = email.split('@')[0]; // Sacamos el nombre antes del @
+// Elementos y lógica para el login modal
+const loginForm = document.querySelector('#login-modal form');
+const privateSection = document.getElementById('seccionPrivada');
+const loginMessage = document.getElementById('mensajeLogin');
 
-    // Guardamos en LocalStorage que ya estamos dentro (Punto 7)
-    localStorage.setItem('usuarioNexus', nombreUsuario);
+/**
+ * Evento: formulario de login, simula un usuario y guarda en localStorage
+ */
+loginForm.addEventListener('submit', (e) => {
+    e.preventDefault(); // Previene recarga
+
+    // Consigue el nombre del usuario a partir del email
+    const email = loginForm.querySelector('input[type="email"]').value;
+    const username = email.split('@')[0];
+
+    // Guarda el usuario en localStorage
+    localStorage.setItem('usuarioNexus', username);
     
-    // Cerramos el modal (usando el truco del hash vacío)
+    // Cierra el modal (truco hash vacío)
     window.location.hash = ''; 
     
-    alert(`Bienvenido de nuevo, ${nombreUsuario}`);
-    comprobarSesion();
+    alert(`Bienvenido de nuevo, ${username}`);
+    checkLoggedUser();
 });
 
-function comprobarSesion() {
-    const usuarioCargado = localStorage.getItem('usuarioNexus');
-    
-    if (usuarioCargado) {
-        // Si hay usuario, mostramos los movimientos y quitamos el mensaje
-        seccionPrivada.classList.remove('hidden');
-        mensajeLogin.classList.add('hidden');
+/**
+ * Comprueba si el usuario está logueado, para mostrar sección privada del dashboard
+ */
+function checkLoggedUser() {
+    const loadedUser = localStorage.getItem('usuarioNexus');
+    if (loadedUser) {
+        privateSection.classList.remove('hidden');
+        loginMessage.classList.add('hidden');
     }
 }
 
-// Llamamos a la función al cargar la página
-window.addEventListener('load', comprobarSesion);
+// Comprueba sesión al cargar la página
+window.addEventListener('load', checkLoggedUser);
 
-// Función para exportar todos los movimientos a un archivo CSV
-function exportarCSV() {
-    const movimientos = JSON.parse(localStorage.getItem('movimientosNexus')) || [];
-    const csvContent = "data:text/csv;charset=utf-8," + movimientos.map(m => `${m.titulo},${m.cantidad},${m.fecha}`).join("\n");
-    const encodedUri = encodeURI(csvContent);
-    const link = document.createElement("a");
-    link.setAttribute("href", encodedUri);
-    link.setAttribute("download", "movimientos_nexus.csv");
-    document.body.appendChild(link);
-    link.click();
+/**
+ * Exporta todos los movimientos a un archivo CSV (con fecha en el nombre y control de errores)
+ */
+function exportMovementsCSV() {
+    try {
+        const movimientosCsvArr = JSON.parse(localStorage.getItem('movimientosNexus')) || [];
+        const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+        const csvContent = "data:text/csv;charset=utf-8," + movimientosCsvArr.map(mov => `${mov.titulo},${mov.cantidad},${mov.fecha}`).join("\n");
+        const encodedUri = encodeURI(csvContent);
+        const downloadLink = document.createElement("a");
+        downloadLink.setAttribute("href", encodedUri);
+        downloadLink.setAttribute("download", `movimientos_nexus_${today}.csv`);
+        document.body.appendChild(downloadLink);
+        downloadLink.click();
+        document.body.removeChild(downloadLink);
+    } catch (error) {
+        alert("Ocurrió un error al exportar los movimientos: " + error.message);
+        console.error("Exportar CSV error:", error);
+    }
 }
