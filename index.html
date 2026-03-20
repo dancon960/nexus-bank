@@ -32,7 +32,7 @@
                 <a href="#" class="hover:text-white dark:hover:text-black">Wealth</a>
                 <a href="#" class="hover:text-white dark:hover:text-black">Crypto</a>
                 <a href="#" class="hover:text-white dark:hover:text-black">Cards</a>
-                <button id="themeToggle" class="border border-zinc-700 dark:border-zinc-300 px-3 py-1 rounded-full text-xs">🌓 Modo</button>
+                <button id="themeToggle" onclick="toggleTheme()" class="...">🌓 Modo</button>
             </nav>
             <a href="#login-modal" class="bg-zinc-800 text-white px-5 py-2 rounded-full text-sm font-medium dark:bg-zinc-200 dark:text-black">Log In</a>
         </div>
@@ -92,9 +92,9 @@
     <div class="flex flex-col md:flex-row gap-4 mb-8">
         <input type="text" id="busqueda" placeholder="Buscar movimiento..." class="bg-zinc-800 border border-zinc-700 p-3 rounded-xl flex-1 dark:bg-white dark:border-zinc-300 dark:text-black">
         <div class="flex gap-2">
-            <button onclick="filtrarMovimientos('todos')" class="bg-zinc-800 px-4 py-2 rounded-lg text-xs font-bold hover:bg-zinc-700 dark:bg-zinc-200 dark:text-black">Todos</button>
-            <button onclick="filtrarMovimientos('ingreso')" class="bg-green-900/30 text-green-400 px-4 py-2 rounded-lg text-xs font-bold hover:bg-green-900/50">Ingresos</button>
-            <button onclick="filtrarMovimientos('gasto')" class="bg-red-900/30 text-red-400 px-4 py-2 rounded-lg text-xs font-bold hover:bg-red-900/50">Gastos</button>
+            <button onclick="window.filtrarGlobal('todos')" ...>Todos</button>
+            <button onclick="window.filtrarGlobal('ingreso')" ...>Ingresos</button>
+            <button onclick="window.filtrarGlobal('gasto')" ...>Gastos</button>
         </div>
     </div>
 
@@ -144,7 +144,7 @@
         <div class="bg-zinc-900 border border-zinc-800 p-10 rounded-[2.5rem] w-full max-w-sm relative dark:bg-white dark:border-zinc-200">
             <a href="#" class="absolute top-6 right-6 text-2xl">&times;</a>
             <h2 class="text-2xl font-bold mb-8 text-center">Acceso Clientes</h2>
-            <form class="flex flex-col gap-4">
+            <form onsubmit="handleLogin(event)" class="flex flex-col gap-4">
                 <input type="email" placeholder="Email" class="bg-zinc-800 border border-zinc-700 p-4 rounded-2xl dark:bg-zinc-100 dark:border-zinc-200">
                 <input type="password" placeholder="Password" class="bg-zinc-800 border border-zinc-700 p-4 rounded-2xl dark:bg-zinc-100 dark:border-zinc-200">
                 <button class="bg-white text-black font-bold p-4 rounded-2xl mt-4 dark:bg-black dark:text-white">Entrar</button>

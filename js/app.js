@@ -2,58 +2,83 @@ import { storage } from './modules/storage.js';
 import { ui } from './modules/ui.js';
 import { calcularEstadisticas, filtrarPorTipo } from './modules/logic.js';
 
-// --- CONFIGURACIÓN ---
-const plansInfo = {
-    Standard: ["Tarjeta gratis", "App móvil", "Soporte básico"],
-    Silver: ["Cashback 1%", "Seguro de viaje", "Tarjeta metal"],
-    Premium: ["Salas VIP", "Seguro total", "Gestor personal"]
-};
-
+// --- ESTADO ---
 let movimientosList = storage.get('movimientosNexus') || [];
 
-// --- SELECTORES ---
-const planSelector = document.getElementById('planSelector');
-const container = document.getElementById('listaMovimientos');
-
-// --- FUNCIONES CORE ---
+// --- REFRESCAR UI ---
 function refreshUI(data = movimientosList) {
     storage.save('movimientosNexus', movimientosList);
-    container.innerHTML = data.map(mov => ui.renderMovimiento(mov)).join('');
+    const container = document.getElementById('listaMovimientos');
+    if (container) {
+        container.innerHTML = data.map(mov => ui.renderMovimiento(mov)).join('');
+    }
     ui.actualizarStats(calcularEstadisticas(data));
 }
 
-// Hacemos esta función global para que el botón 'X' funcione con módulos
+// --- FUNCIONES GLOBALES (Para tus botones del HTML) ---
+
+window.toggleTheme = () => {
+    const isDark = document.documentElement.classList.toggle('dark');
+    storage.save('preferenciaOscura', isDark);
+};
+
+window.handleLogin = (e) => {
+    e.preventDefault();
+    const email = e.target.querySelector('input[type="email"]').value;
+    if(!email) return alert("Introduce un email");
+    
+    const username = email.split('@')[0];
+    storage.save('usuarioNexus', username);
+    window.location.hash = ''; 
+    alert(`Bienvenido, ${username}`);
+    checkLoggedUser();
+};
+
+window.filtrarGlobal = (tipo) => {
+    const filtrados = filtrarPorTipo(movimientosList, tipo);
+    refreshUI(filtrados);
+};
+
 window.eliminarMovimientoGlobal = (id) => {
     movimientosList = movimientosList.filter(m => m.id !== id);
     refreshUI();
 };
 
-// --- EVENTOS ---
-document.getElementById('themeToggle').addEventListener('click', () => {
-    const isDark = document.documentElement.classList.toggle('dark');
-    storage.save('preferenciaOscura', isDark);
-});
-
-document.getElementById('formMovimiento').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const titulo = document.getElementById('tituloMov').value;
-    const cantidad = parseFloat(document.getElementById('cantidadMov').value);
-
-    if (titulo.length < 3 || isNaN(cantidad)) return alert("Datos inválidos");
-
-    movimientosList.push({
-        id: Date.now().toString(),
-        titulo,
-        cantidad,
-        fecha: new Date().toLocaleDateString()
-    });
+function checkLoggedUser() {
+    const user = storage.get('usuarioNexus');
+    const privateSection = document.getElementById('seccionPrivada');
+    const loginMessage = document.getElementById('mensajeLogin');
     
-    e.target.reset();
-    refreshUI();
-});
+    if (user && privateSection && loginMessage) {
+        privateSection.classList.remove('hidden');
+        loginMessage.classList.add('hidden');
+    }
+}
 
-// Inicialización
-window.addEventListener('load', () => {
+// --- INICIALIZACIÓN ---
+document.addEventListener('DOMContentLoaded', () => {
     if (storage.get('preferenciaOscura')) document.documentElement.classList.add('dark');
+    
+    const form = document.getElementById('formMovimiento');
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const titulo = document.getElementById('tituloMov').value;
+            const cantidad = parseFloat(document.getElementById('cantidadMov').value);
+            
+            if (titulo.length < 3 || isNaN(cantidad)) return alert("Datos no válidos");
+
+            movimientosList.push({
+                id: Date.now().toString(),
+                titulo,
+                cantidad,
+                fecha: new Date().toLocaleDateString()
+            });
+            form.reset();
+            refreshUI();
+        });
+    }
+    
+    checkLoggedUser();
     refreshUI();
 });
