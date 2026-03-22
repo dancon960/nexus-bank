@@ -1,12 +1,13 @@
 /**
  * Módulo de Almacenamiento
- * Gestiona la persistencia de datos en LocalStorage
+ * Gestión del almacenamiento en el navegador
  */
-
-export const storage = {
+const storage = {
+    // Guarda datos asociados a una clave
     save(key, data) {
         localStorage.setItem(key, JSON.stringify(data));
     },
+    // Recupera datos y los convierte en objeto/array
     get(key) {
         const data = localStorage.getItem(key);
         try {
@@ -14,8 +15,5 @@ export const storage = {
         } catch (e) {
             return data;
         }
-    },
-    exists(key) {
-        return localStorage.getItem(key) !== null;
     }
 };

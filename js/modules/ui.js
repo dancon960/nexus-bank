@@ -1,9 +1,9 @@
 /**
  * Módulo de Interfaz de Usuario (UI)
- * Maneja lo que el usuario ve en pantalla
+ * Funciones para actualizar la interfaz visual
  */
-
-export const ui = {
+const ui = {
+    // Genera el HTML para un solo movimiento
     renderMovimiento(mov) {
         const isExpense = mov.cantidad < 0;
         return `
@@ -13,26 +13,24 @@ export const ui = {
                     <p class="text-xs text-zinc-500">${mov.fecha}</p>
                 </div>
                 <div class="flex items-center gap-4">
-                    <span class="font-black ${isExpense ? 'text-red-400' : 'text-green-400'}">${mov.cantidad.toFixed(2)}€</span>
-                    <button onclick="window.eliminarMovimientoGlobal('${mov.id}')" class="text-zinc-600 hover:text-white">✕</button>
+                    <span class="font-black ${isExpense ? 'text-red-400' : 'text-green-400'}">
+                        ${mov.cantidad.toFixed(2)}€
+                    </span>
+                    <button onclick="window.eliminarMovimientoGlobal('${mov.id}')" class="text-zinc-600 hover:text-white">
+                        ✕
+                    </button>
                 </div>
             </div>`;
     },
 
+    // Actualiza los cuadros de texto de las estadísticas
     actualizarStats(stats) {
-        document.getElementById('statTotal').innerText = `${stats.total.toFixed(2)}€`;
-        document.getElementById('statIngresos').innerText = `${stats.ingresos.toFixed(2)}€`;
-        document.getElementById('statGastos').innerText = `${stats.gastos.toFixed(2)}€`;
-    },
+        const elTotal = document.getElementById('statTotal');
+        const elIngresos = document.getElementById('statIngresos');
+        const elGastos = document.getElementById('statGastos');
 
-    mostrarBeneficios(lista, info) {
-        let html = "<ul class='space-y-3'>";
-        info.forEach(benefit => {
-            html += `<li class="flex items-center gap-3 text-zinc-400 dark:text-zinc-600">
-                        <span class="text-green-500 font-bold">✓</span> ${benefit}
-                     </li>`;
-        });
-        html += "</ul>";
-        lista.innerHTML = html;
+        if (elTotal) elTotal.innerText = `${stats.total.toFixed(2)}€`;
+        if (elIngresos) elIngresos.innerText = `${stats.ingresos.toFixed(2)}€`;
+        if (elGastos) elGastos.innerText = `${stats.gastos.toFixed(2)}€`;
     }
 };

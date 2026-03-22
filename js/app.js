@@ -1,7 +1,3 @@
-import { storage } from './modules/storage.js';
-import { ui } from './modules/ui.js';
-import { calcularEstadisticas, filtrarPorTipo } from './modules/logic.js';
-
 // --- ESTADO ---
 let movimientosList = storage.get('movimientosNexus') || [];
 
