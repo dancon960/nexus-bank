@@ -2,20 +2,27 @@
 const express = require('express');
 const cors = require('cors');
 const { port } = require('./config/env');
+const taskRoutes = require('./routes/task.routes');
 
 const app = express();
 
-// Middlewares iniciales (los "filtros" de la entrada)
-app.use(cors()); // Permite que tu frontend hable con este backend
-app.use(express.json()); // Permite que el servidor entienda JSON
+// --- MIDDLEWARES GLOBALES ---
+app.use(cors());
+app.use(express.json());
 
-// Ruta de prueba (el "Hola Mundo")
-app.get('/', (req, res) => {
-    res.send('API de TaskFlow funcionando correctamente 🚀');
+// --- RUTAS DE LA API ---
+app.use('/api/v1/tasks', taskRoutes);
+
+// --- MANEJO DE ERRORES GLOBAL ---
+app.use((err, req, res, next) => {
+    console.error(`[SERVER ERROR]: ${err.stack}`);
+    res.status(500).json({ 
+        error: 'Algo salió mal en el servidor',
+        message: err.message 
+    });
 });
 
-// Arrancar el servidor
 app.listen(port, () => {
-    console.log(`✅ Servidor Express corriendo en http://localhost:${port}`);
-    console.log('Presiona Ctrl+C para detenerlo');
+    console.log(`🚀 Servidor TaskFlow conectado y capas activas`);
+    console.log(`📍 Endpoints: http://localhost:${port}/api/v1/tasks`);
 });
