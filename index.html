@@ -126,11 +126,22 @@
     <div id="login-modal" class="fixed inset-0 bg-black/90 hidden items-center justify-center z-50 target:flex">
         <div class="bg-zinc-900 border border-zinc-800 p-10 rounded-[2.5rem] w-full max-w-sm relative dark:bg-white dark:border-zinc-200">
             <a href="#" class="absolute top-6 right-6 text-2xl">&times;</a>
-            <h2 class="text-2xl font-bold mb-8 text-center">Acceso Clientes</h2>
+            
+            <h2 class="text-2xl font-bold mb-8 text-center text-white dark:text-black">Acceso Clientes</h2>
+            
             <form onsubmit="window.handleLogin(event)" class="flex flex-col gap-4">
-                <input type="email" placeholder="Email" required class="bg-zinc-800 border border-zinc-700 p-4 rounded-2xl dark:bg-zinc-100 dark:border-zinc-200">
-                <input type="password" placeholder="Password" required class="bg-zinc-800 border border-zinc-700 p-4 rounded-2xl dark:bg-zinc-100 dark:border-zinc-200">
-                <button type="submit" class="bg-white text-black font-bold p-4 rounded-2xl mt-4 dark:bg-black dark:text-white">Entrar</button>
+                <input type="email" placeholder="Email" required 
+                    class="bg-zinc-800 border border-zinc-700 p-4 rounded-2xl dark:bg-zinc-100 dark:border-zinc-200 text-white dark:text-black outline-none focus:ring-2 focus:ring-zinc-500">
+                
+                <input type="password" placeholder="Password" required 
+                    class="bg-zinc-800 border border-zinc-700 p-4 rounded-2xl dark:bg-zinc-100 dark:border-zinc-200 text-white dark:text-black outline-none focus:ring-2 focus:ring-zinc-500">
+                
+                <div id="loginStatus" class="text-xs text-center min-h-[1.25rem] font-medium mt-2"></div>
+    
+                <button type="submit" id="btnEntrar" 
+                    class="bg-white text-black font-bold p-4 rounded-2xl mt-2 dark:bg-black dark:text-white hover:scale-[1.02] transition-transform disabled:opacity-50 disabled:cursor-not-allowed">
+                    Entrar
+                </button>
             </form>
         </div>
     </div>
